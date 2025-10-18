@@ -1,0 +1,27 @@
+# .NET
+backend/bin/
+backend/obj/
+backend/.vs/
+backend/*.user
+backend/*.suo
+
+# React
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+
+# Docker
+*.log
+
+# Database
+mysql_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

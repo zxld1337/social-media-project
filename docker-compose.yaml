@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # MySQL adatbázis
+  db:
+    image: mysql:8.0
+    container_name: social-media-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: socialmedia
+      MYSQL_USER: apiuser
+      MYSQL_PASSWORD: apipassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - social-media-network
+
+  # .NET Core API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: social-media-api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=socialmedia;User=apiuser;Password=apipassword;
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    networks:
+      - social-media-network
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: social-media-frontend
+    restart: always
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - social-media-network
+
+  # phpMyAdmin (opcionális, dev környezethez)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: social-media-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - social-media-network
+
+volumes:
+  mysql_data:
+
+networks:
+  social-media-network:
+    driver: bridge
