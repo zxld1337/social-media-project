@@ -35,3 +35,4 @@ C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Scalar.AspNetCore.dll
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\SocialMediaAPI.sourcelink.json
