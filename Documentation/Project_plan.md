@@ -1,5 +1,5 @@
-#Project plan socail media app
-######version:1.0
+# Project plan socail media app
+###### version:1.0
 
 
 
