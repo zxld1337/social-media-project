@@ -1,7 +1,6 @@
 ﻿using SocialMediaAPI.Repositories;
 using SocialMediaAPI.Services;
 using SocialMediaAPI.Models;
-using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
