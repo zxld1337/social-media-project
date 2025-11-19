@@ -5,13 +5,24 @@ using SocialMediaAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
 using SocialMediaAPI.Services;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Add services to the container:
+//Add Services to the Container:
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Reminder: Look into user authentication!!!
+//Add Authentication Services:
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+    {
+        options.Cookie.Name = "SocialAppAuth"; // Custom name for the authentication cookie
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // How long the cookie lasts
+        options.SlidingExpiration = true; // Resets expiration on activity
+        options.LoginPath = "/login"; // Optional: specify where to redirect unauthorized users
+    });
 
 //Register the BCrypt Hashing Service:
 builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
@@ -37,6 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication(); //Used for Login
 app.UseAuthorization();
 app.MapControllers();
 

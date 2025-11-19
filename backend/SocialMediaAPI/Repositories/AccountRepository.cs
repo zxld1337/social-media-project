@@ -3,12 +3,15 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Data;
+using SocialMediaAPI.Models.Entities;
+using System.Security.Principal;
 
 namespace SocialMediaAPI.Repositories
 {
     public interface IAccountRepository
     {
         Task<int> CreateAccountAsync(string username, string email, string hashedPassword);
+        Task<Accounts?> GetAccountByUsernameAsync(string username);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -30,6 +33,13 @@ namespace SocialMediaAPI.Repositories
                 Email = email,
                 PasswordHash = passwordHash
             });
+        }
+
+        public async Task<Accounts?> GetAccountByUsernameAsync(string username)
+        {
+            var sql = @"SELECT id, username, password FROM accounts WHERE username = @Username;";
+
+            return await _connection.QuerySingleOrDefaultAsync<Accounts>(sql, new { Username = username });
         }
     }
 }
