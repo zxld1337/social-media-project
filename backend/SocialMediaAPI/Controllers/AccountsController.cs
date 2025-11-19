@@ -30,7 +30,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //List all accounts - for simplicity/testing - usually only accessed by admin
-        [HttpGet]
+        [HttpGet("api/users")]
         [AllowAnonymous] //ONLY FOR TESTING!! REMOVE THIS LINE LATER!
         public async Task<ActionResult<IEnumerable<AccountReadDto>>> GetAll()
         {
@@ -49,7 +49,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //Access data about one specific account (using account id)
-        [HttpGet("{id:int}")]
+        [HttpGet("api/users/{id:int}")]
         public async Task<ActionResult<AccountReadDto>> GetById(int id)
         {
             var account = await _repository.GetAccountByIdAsync(id);
@@ -82,7 +82,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //Update our profile
-        [HttpPut("profile")]
+        [HttpPut("api/users/{id:int}")]
         public async Task<IActionResult> UpdateProfile([FromBody] AccountUpdateDto updateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -113,7 +113,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //Delete the logged-in user
-        [HttpDelete("profile")]
+        [HttpDelete("api/users/{id:int}")]
         public async Task<IActionResult> DeleteUser()
         {
             int userId = GetCurrentUserId();
