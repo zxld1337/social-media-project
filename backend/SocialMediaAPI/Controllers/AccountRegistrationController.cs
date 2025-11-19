@@ -34,10 +34,19 @@ namespace SocialMediaAPI.Controllers
 
             try
             {
+                //Preventing HTML Injection
                 string sanitizedUsername = _htmlEncoder.Encode(registrationData.Username);
                 string sanitizedEmail = _htmlEncoder.Encode(registrationData.Email);
 
-                //Does Password not need HTML encoding, only hashing?
+                //Checking for duplicate Username in Database
+                bool isTaken = await _repository.IsUsernameTakenAsync(sanitizedUsername);
+                if (isTaken)
+                {
+                    //Return: HTTP 409 Conflict or 400 Bad Request
+                    ModelState.AddModelError(nameof(registrationData.Username), "This username is already in use.");
+                    return Conflict(new { Message = "Username is already taken! Cannot create account!", Errors = ModelState });
+                }
+
                 //Hashing the Password using BCrypt
                 string hashedPassword = _hasher.HashPassword(registrationData.Password);
 
