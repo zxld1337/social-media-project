@@ -34,7 +34,7 @@ CREATE TABLE `accounts` (
   `full_name` varchar(40) DEFAULT NULL,
   `email` varchar(40) NOT NULL,
   `phone_number` varchar(11) DEFAULT NULL,
-  `date_of_birth` datetime DEFAULT NULL,
+  `date_of_birth` varchar(20) DEFAULT NULL, -- Changed type from datetime to varchar(20)
   `date_of_create` datetime NOT NULL DEFAULT current_timestamp(),
   `profile_picture` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
