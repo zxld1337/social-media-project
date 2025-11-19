@@ -9,6 +9,7 @@ using System.Text.Encodings.Web;
 
 namespace SocialMediaAPI.Controllers
 {
+    [ApiController]
     public class AccountRegistrationController : ControllerBase
     {
         private readonly IAccountRepository _repository;

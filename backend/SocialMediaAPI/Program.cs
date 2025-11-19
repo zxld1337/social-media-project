@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Add Services to the Container:
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 //Reminder: Look into user authentication!!!
 //Add Authentication Services:
@@ -40,10 +40,10 @@ builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(builder.Conf
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.MapOpenApi();
     app.MapScalarApiReference();
 }
 

@@ -11,6 +11,7 @@ using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Controllers
 {
+    [ApiController]
     public class AccountLoginController : ControllerBase
     {
         private readonly IAccountRepository _repository;
