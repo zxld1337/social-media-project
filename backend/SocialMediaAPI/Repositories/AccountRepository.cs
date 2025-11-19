@@ -10,6 +10,7 @@ namespace SocialMediaAPI.Repositories
 {
     public interface IAccountRepository
     {
+        Task<bool> IsUsernameTakenAsync(string username);
         Task<int> CreateAccountAsync(string username, string email, string hashedPassword);
         Task<Accounts?> GetAccountByUsernameAsync(string username);
     }
@@ -20,6 +21,15 @@ namespace SocialMediaAPI.Repositories
         public AccountRepository(IDbConnection connection)
         {
             _connection = connection;
+        }
+
+        public async Task<bool> IsUsernameTakenAsync(string username)
+        {
+            var sql = @"SELECT COUNT(1) FROM accounts WHERE username = @Username";
+
+            var count = await _connection.ExecuteScalarAsync<int>(sql, new { Username = username });
+
+            return count > 0;
         }
 
         public async Task<int> CreateAccountAsync(string username, string email, string passwordHash)
@@ -37,7 +47,7 @@ namespace SocialMediaAPI.Repositories
 
         public async Task<Accounts?> GetAccountByUsernameAsync(string username)
         {
-            var sql = @"SELECT id, username, password FROM accounts WHERE username = @Username;";
+            var sql = @"SELECT id, username, email, password FROM accounts WHERE username = @Username;";
 
             return await _connection.QuerySingleOrDefaultAsync<Accounts>(sql, new { Username = username });
         }
