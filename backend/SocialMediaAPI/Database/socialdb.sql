@@ -30,13 +30,13 @@ SET time_zone = "+00:00";
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `full_name` varchar(40) NULL,
+  `password` varchar(72) NOT NULL,
+  `full_name` varchar(40) DEFAULT NULL,
   `email` varchar(40) NOT NULL,
-  `phone_number` varchar(11) NULL,
-  `date_of_birth` datetime NULL,
+  `phone_number` varchar(11) DEFAULT NULL,
+  `date_of_birth` datetime DEFAULT NULL,
   `date_of_create` datetime NOT NULL DEFAULT current_timestamp(),
-  `profile_picture` blob NULL
+  `profile_picture` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
