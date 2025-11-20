@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
 //Register the MySQL Dapper Repository:
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 //Register built-in HTML Encoder:
 builder.Services.AddSingleton(HtmlEncoder.Default);
