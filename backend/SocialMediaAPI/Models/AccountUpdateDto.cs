@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http; //Needed for IFormFile!
+using System.ComponentModel.DataAnnotations;
 
 namespace SocialMediaAPI.Models
 {
