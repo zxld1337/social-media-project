@@ -15,7 +15,7 @@ namespace SocialMediaAPI.Repositories
         Task<Accounts?> GetAccountByUsernameAsync(string username);
         Task<IEnumerable<Accounts>> GetAllAccountsAsync();
         Task<Accounts?> GetAccountByIdAsync(int id);
-        Task<bool> UpdateAccountAsync(int id, string? newEmail, string? newFullName, string? newPhone, string? newDateOfBirth);
+        Task<bool> UpdateAccountAsync(int id, string? newEmail, string? newFullName, string? newPhone, string? newDateOfBirth, byte[]? newProfilePicture);
         Task<bool> DeleteAccountAsync(int id);
     }
     public class AccountRepository : IAccountRepository
@@ -69,7 +69,7 @@ namespace SocialMediaAPI.Repositories
             return await _connection.QuerySingleOrDefaultAsync<Accounts>(sql, new { Id = id });
         }
 
-        public async Task<bool> UpdateAccountAsync(int id, string? newEmail, string? newFullName, string? newPhoneNumber, string? newDateOfBirth)
+        public async Task<bool> UpdateAccountAsync(int id, string? newEmail, string? newFullName, string? newPhoneNumber, string? newDateOfBirth, byte[]? newProfilePicture)
         {
             // Build the update query dynamically for cleaner execution
             var updates = new List<string>();
@@ -96,7 +96,11 @@ namespace SocialMediaAPI.Repositories
                 updates.Add("date_of_birth = @NewDateOfBirth");
                 parameters.Add("NewDateOfBirth", newDateOfBirth);
             }
-            //Add option to modify profile picture!
+            if (newProfilePicture != null)
+            {
+                updates.Add("profile_picture = @NewProfilePicture");
+                parameters.Add("NewProfilePicture", newProfilePicture, DbType.Binary); //Specify DbType.Binary
+            }
 
             if (updates.Count == 0) return false;
 

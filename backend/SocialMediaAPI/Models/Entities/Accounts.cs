@@ -10,6 +10,6 @@
         public string? PhoneNumber { get; set; }
         public string? DateOfBirth { get; set; }
         public string? DateOfCreate { get; set; }
-        public IFormFile? ProfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
     }
 }
