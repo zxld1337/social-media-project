@@ -9,6 +9,8 @@ namespace SocialMediaAPI.Models
         public string? FullName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? DateOfBirth { get; set; }
-        public IFormFile? ProfilePicture { get; set; }
+        public IFormFile? ProfilePictureFile { get; set; }
+        //Since IFormFile is used to receive file uploads via HTTP,
+        //the DTO for the PUT request must use it. The controller will convert it to byte[].
     }
 }

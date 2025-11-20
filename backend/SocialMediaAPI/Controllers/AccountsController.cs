@@ -7,6 +7,7 @@ using SocialMediaAPI.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using SocialMediaAPI.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.IO; //Required for reading file stream -> profile_picture
 
 namespace SocialMediaAPI.Controllers
 {
@@ -68,7 +69,8 @@ namespace SocialMediaAPI.Controllers
                 FullName = account.FullName,
                 PhoneNumber = account.PhoneNumber,
                 DateOfBirth = account.DateOfBirth,
-                DateOfCreate = account.DateOfCreate
+                DateOfCreate = account.DateOfCreate,
+                ProfilePicture = account.ProfilePicture
             };
 
             //Only return sensitive fields (like DateOfBirth/Phone) if the user is viewing their own profile
@@ -88,6 +90,23 @@ namespace SocialMediaAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             int userId = GetCurrentUserId();
+            byte[]? profilePictureData = null; //Variable to hold Image bytes
+
+            //Logic to convert IFormFile TO byte[]
+            if (updateDto.ProfilePictureFile != null && updateDto.ProfilePictureFile.Length > 0)
+            {
+                //Add a check for file size/type here!
+                if (updateDto.ProfilePictureFile.Length > 5242880) //5MB limit
+                {
+                    return BadRequest(new { Message = "Profile picture size exceeds limit." });
+                }
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await updateDto.ProfilePictureFile.CopyToAsync(memoryStream);
+                    profilePictureData = memoryStream.ToArray();
+                }
+            }
 
             //Sanitize all updateable string fields
             string? sanitizedEmail = _htmlEncoder.Encode(updateDto.Email ?? string.Empty);
@@ -101,7 +120,8 @@ namespace SocialMediaAPI.Controllers
                 sanitizedEmail,
                 sanitizedFullName,
                 sanitizedPhoneNumber,
-                sanitizedDateOfBirth
+                sanitizedDateOfBirth,
+                profilePictureData
             );
 
             if (!success)
