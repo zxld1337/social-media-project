@@ -83,7 +83,10 @@ namespace SocialMediaAPI.Controllers
 
             bool success = await _repository.DeleteCommentAsync(commentId);
 
-            if (!success) return StatusCode(500, "Delete failed in the repository.");
+            if (!success)
+            {
+                return StatusCode(500, "Delete failed in the repository.");
+            }
 
             return Ok(new { Message = "Comment successfully deleted." });
         }
