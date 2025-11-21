@@ -24,7 +24,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //Like a post
-        [HttpPost("")]
+        [HttpPost("api/posts/{postId:int}/like")]
         public async Task<IActionResult> LikePost(int postId)
         {
             int userId = GetCurrentUserId();
@@ -52,7 +52,7 @@ namespace SocialMediaAPI.Controllers
         }
 
         //Delete (Unlike) a post
-        [HttpDelete("")]
+        [HttpDelete("api/posts/{postId:int}/like")]
         public async Task<IActionResult> UnlikePost(int postId)
         {
             int userId = GetCurrentUserId();
