@@ -7,5 +7,8 @@
         public byte[]? Image { get; set; }
         public string? Text { get; set; }
         public string? DateOfPost { get; set; }
+
+        //Display username with post
+        public string? Username { get; set; }
     }
 }

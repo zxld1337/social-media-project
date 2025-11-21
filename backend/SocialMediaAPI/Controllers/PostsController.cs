@@ -50,17 +50,7 @@ namespace SocialMediaAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PostReadDto>>> GetAll()
         {
-            var posts = await _repository.GetAllPostsAsync();
-
-            // Map Posts entity to PostReadDto
-            var readDtos = posts.Select(p => new PostReadDto
-            {
-                Id = p.Id,
-                UserId = p.UserId,
-                Image = p.Image,
-                Text = p.Text,
-                DateOfPost = p.DateOfPost
-            });
+            var readDtos = await _repository.GetAllPostsAsync();
 
             return Ok(readDtos);
         }
@@ -70,19 +60,9 @@ namespace SocialMediaAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<PostReadDto>> GetById(int id)
         {
-            var post = await _repository.GetPostByIdAsync(id);
+            var readDto = await _repository.GetPostByIdAsync(id);
 
-            if (post == null) return NotFound();
-
-            //Map Posts entity to PostReadDto
-            var readDto = new PostReadDto
-            {
-                Id = post.Id,
-                UserId = post.UserId,
-                Image = post.Image,
-                Text = post.Text,
-                DateOfPost = post.DateOfPost
-            };
+            if (readDto == null) return NotFound();
 
             return Ok(readDto);
         }
