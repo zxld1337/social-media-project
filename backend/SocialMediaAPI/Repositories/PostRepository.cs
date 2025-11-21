@@ -2,13 +2,14 @@
 using Dapper;
 using System.Data;
 using System.Threading.Tasks;
+using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Repositories
 {
     public interface IPostRepository
     {
-        Task<IEnumerable<Posts>> GetAllPostsAsync();
-        Task<Posts?> GetPostByIdAsync(int id);
+        Task<IEnumerable<PostReadDto>> GetAllPostsAsync();
+        Task<PostReadDto?> GetPostByIdAsync(int id);
         Task<int> CreatePostAsync(int userId, byte[]? imageData, string? text);
         Task<bool> UpdatePostAsync(int id, string? text, byte[]? imageData);
         Task<bool> DeletePostAsync(int id);
@@ -16,23 +17,24 @@ namespace SocialMediaAPI.Repositories
     public class PostRepository : IPostRepository
     {
         private readonly IDbConnection _connection;
-        private readonly string _allPostFields = "id, user_id, image, text, date_of_post";
 
         public PostRepository(IDbConnection connection)
         {
             _connection = connection;
         }
 
-        public async Task<IEnumerable<Posts>> GetAllPostsAsync()
+        public async Task<IEnumerable<PostReadDto>> GetAllPostsAsync()
         {
-            var sql = $"SELECT {_allPostFields} FROM posts ORDER BY date_of_post DESC";
-            return await _connection.QueryAsync<Posts>(sql);
+            var sql = @"SELECT p.id, p.user_id, p.image, p.text, p.date_of_post, a.username AS Username
+                        FROM posts p INNER JOIN accounts a ON p.user_id = a.id ORDER BY p.date_of_post DESC";
+            return await _connection.QueryAsync<PostReadDto>(sql);
         }
 
-        public async Task<Posts?> GetPostByIdAsync(int id)
+        public async Task<PostReadDto?> GetPostByIdAsync(int id)
         {
-            var sql = $"SELECT {_allPostFields} FROM posts WHERE id = @Id";
-            return await _connection.QuerySingleOrDefaultAsync<Posts>(sql, new { Id = id });
+            var sql = @"SELECT p.id, p.user_id, p.image, p.text, p.date_of_post, a.username AS Username
+                        FROM posts p INNER JOIN accounts a ON p.user_id = a.id WHERE p.id = @Id";
+            return await _connection.QuerySingleOrDefaultAsync<PostReadDto>(sql, new { Id = id });
         }
 
         public async Task<int> CreatePostAsync(int userId, byte[]? imageData, string? text)
