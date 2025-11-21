@@ -71,10 +71,7 @@ namespace SocialMediaAPI.Repositories
 
             if (updates.Count == 0) return false;
 
-            var sql = $@"
-            UPDATE posts
-            SET {string.Join(", ", updates)}
-            WHERE id = @Id";
+            var sql = $@"UPDATE posts SET {string.Join(", ", updates)} WHERE id = @Id";
 
             var rowsAffected = await _connection.ExecuteAsync(sql, parameters);
             return rowsAffected > 0;
