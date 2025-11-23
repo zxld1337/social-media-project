@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../styles/AuthForms.css';
 
 const LoginForm = ({ onSuccess, onToggle }) => {
   const [formData, setFormData] = useState({
@@ -26,15 +27,16 @@ const LoginForm = ({ onSuccess, onToggle }) => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="login-container">
+      <h2 className="login-title">Login</h2>
+      <form className="login-form" onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          className="login-input"
           required
         />
         <input
@@ -43,13 +45,14 @@ const LoginForm = ({ onSuccess, onToggle }) => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          className="login-input"
           required
         />
-        <button type="submit">Log In</button>
+        <button type="submit" className="login-button">Log In</button>
       </form>
-      <p>
+      <p className="login-toggle-text">
         Don't have an account? 
-        <button onClick={onToggle}>Sign Up</button>
+        <button onClick={onToggle} className="toggle-button">Sign Up</button>
       </p>
     </div>
   );
