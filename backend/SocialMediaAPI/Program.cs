@@ -27,8 +27,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //Register the BCrypt Hashing Service:
 builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
-//Register the MySQL Dapper Repository:
+//Register the MySQL Dapper Repositories:
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 //Register built-in HTML Encoder:
 builder.Services.AddSingleton(HtmlEncoder.Default);
