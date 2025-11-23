@@ -11,7 +11,7 @@ const RegisterForm = ({ onSuccess, onToggle }) => {
   const handleSubmit = (e) => {
     e.preventDefault(); 
     
-    // Mock registration - replace with actual API call
+    // Mock registration
     const userData = {
       id: Date.now(),
       email: formData.email,
