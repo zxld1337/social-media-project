@@ -1,30 +1,73 @@
-import React, { useState } from 'react';
-import '../../styles/AuthForms.css';
+import React, { useState } from "react";
+import "../../styles/AuthForms.css";
 
 const RegisterForm = ({ onSuccess, onToggle }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); 
-    
-    // Mock registration
-    const userData = {
-      id: Date.now(),
-      email: formData.email,
-      username: formData.username
-    };
-    
-    onSuccess(userData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        "http://localhost:5028/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      if (response.status === 201) { // Registration successful
+        
+        const data = await response.json();
+
+        const userData = {
+          id: data.accountId,
+          email: formData.email,
+          username: formData.username,
+        };
+
+        onSuccess(userData);
+
+      } else if (response.status === 409) { // Username conflict
+        
+        const errorData = await response.json();
+        alert(errorData.message || "Username is already taken!");
+
+      } else if (response.status === 400) { // Bad request/validation error
+        
+        const errorData = await response.json();
+        console.error("Validation errors:", errorData);
+        alert("Please check your input and try again.");
+
+      } else if (response.status === 500) { // Server error        
+        
+        alert("Server error. Please try again later.");
+      } else { // Other errors
+        
+        alert("An unexpected error occurred.");
+      }
+    } catch (error) { // Network error or request failed
+
+      console.error("Registration error:", error);
+      alert("Unable to connect to the server. Please check your connection.");
+    }
   };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -59,11 +102,15 @@ const RegisterForm = ({ onSuccess, onToggle }) => {
           className="login-input"
           required
         />
-        <button type="submit" className="login-button">Sign Up</button>
+        <button type="submit" className="login-button">
+          Sign Up
+        </button>
       </form>
       <p className="login-toggle-text">
-        Have an account? 
-        <button onClick={onToggle} className="toggle-button">Log In</button>
+        Have an account?
+        <button onClick={onToggle} className="toggle-button">
+          Log In
+        </button>
       </p>
     </div>
   );
