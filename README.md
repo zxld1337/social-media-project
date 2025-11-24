@@ -142,6 +142,11 @@ docker-compose restart backend
 - `POST /api/posts/{postId}/like` - Like
 - `DELETE /api/posts/{postId}/like` - Unlike
 
+### Following
+- `GET /api/follow/{id}` - Get follows list
+- `POST /api/follow` - Follow
+- `DELETE /api/follow/{id}` - Unfollow
+
 ## 🎯 Fejlesztési feladatok
 
 ### Sprint 1 - Alapok
