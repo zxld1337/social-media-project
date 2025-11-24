@@ -1,6 +1,6 @@
 # .NET
-backend/bin/
-backend/obj/
+backend/SocialMediaAPI/bin/
+backend/SocialMediaAPI/obj/
 backend/.vs/
 backend/*.user
 backend/*.suo
