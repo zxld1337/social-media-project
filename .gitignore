@@ -4,6 +4,8 @@ backend/SocialMediaAPI/obj/
 backend/.vs/
 backend/*.user
 backend/*.suo
+backend/**/AssemblyInfo.cs
+backend/**/Properties/AssemblyInfo.cs
 
 # React
 frontend/node_modules/
