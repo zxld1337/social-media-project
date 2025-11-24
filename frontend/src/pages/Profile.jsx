@@ -10,9 +10,9 @@ const Profile = () => {
   const [profileData, setProfileData] = useState({
     username: user?.username || '',
     email: user?.email || '',
-    bio: 'Frontend developer passionate about React and modern web technologies. Love building amazing user experiences!',
-    website: 'https://portfolio.example.com',
-    location: 'San Francisco, CA'
+    bio: 'passionate about ... and ... Love ...!',
+    website: 'https://ekke.hu',
+    location: 'Eger, HU'
   });
 
   const handleSave = () => {
