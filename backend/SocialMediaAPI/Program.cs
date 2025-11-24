@@ -39,6 +39,16 @@ builder.Services.AddSingleton(HtmlEncoder.Default);
 //Retrieve MySQL Connection String:
 builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") 
+              .AllowCredentials() 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
 var app = builder.Build();
@@ -56,5 +66,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGet("/", () => "Welcome to the Social Media API!");
+app.UseCors("AllowReactApp");
 
 app.Run();
