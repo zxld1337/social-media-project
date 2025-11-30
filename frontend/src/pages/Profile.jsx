@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { fetchPosts } from '../services/post';
 import '../styles/Profile.css';
 
 const Profile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [userPosts, setUserPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [profileData, setProfileData] = useState({
     username: user?.username || '',
     email: user?.email || '',
@@ -32,29 +37,38 @@ const Profile = () => {
     navigate('/auth');
   };
 
-  // Mock user posts
-  const userPosts = [
-    { id: 1, content: 'Just launched my new golf club', likes: 24, comments: 8, time: '2 days ago' },
-    { id: 2, content: 'Working on a new open-source project.', likes: 15, comments: 3, time: '1 week ago' },
-    { id: 3, content: 'Great day at the Vaci borton', likes: 42, comments: 12, time: '2 weeks ago' }
-  ];
+  useEffect(() => {
+      const loadPosts = async () => {
+        setLoading(true);
+        try {
+          const postsData = await fetchPosts(); 
+          const userSpecificPosts = postsData.filter(post => post.username === user.username);         
+          setUserPosts(userSpecificPosts);
+        } catch (err) {
+          setError("Failed to load posts");
+        }
+        setLoading(false);
+      };
+      loadPosts();
+    }, []);
+
+
 
   return (
     <div className="profile-container">
-      {/* Header/Navigation */}
+      {/* Navigation */}
       <nav className="profile-nav">
         <button className="back-button" onClick={() => navigate('/')}>
-          ← Back to Home
+          ← Back
         </button>
+        <h2 className="nav-title">Profile</h2>
         <div className="nav-actions">
           <button 
-            className="edit-profile-btn"
+            className={`edit-profile-btn ${isEditing ? 'editing' : ''}`}
             onClick={() => setIsEditing(!isEditing)}
           >
-            {isEditing ? 'Cancel' : 'Edit Profile'}
-          </button>
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
+
+            {isEditing ? 'Cancel' : 'Edit'}
           </button>
         </div>
       </nav>
@@ -62,47 +76,37 @@ const Profile = () => {
       <div className="profile-content">
         {/* Profile Header */}
         <div className="profile-header">
-          <div className="profile-cover">
-            <div className="cover-photo"></div>
-            <div className="profile-info">
-              <div className="avatar-section">
-                <img 
-                  src={`https://ui-avatars.com/api/?name=${user?.username}&background=007bff&color=fff&size=150`} 
-                  alt="Profile" 
-                  className="profile-avatar-large"
-                />
-                {isEditing && (
-                  <button className="change-photo-btn">Change Photo</button>
+          <div className="cover-container">
+            <div className="cover-photo">
+              <div className="cover-overlay"></div>
+            </div>
+            <div className="profile-avatar-section">
+              <img 
+                src={`https://ui-avatars.com/api/?name=Kerepesi&background=007bff&color=fff&size=120&bold=true`} 
+                alt="Profile" 
+                className="profile-avatar"
+              />
+              {isEditing && (
+                <button className="change-photo-btn">📷</button>
+              )}
+            </div>
+          </div>
+
+          <div className="profile-info">
+            <div className="profile-main">
+              <div className="profile-text">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="username"
+                    value={profileData.username}
+                    onChange={handleChange}
+                    className="edit-input username-input"
+                    placeholder="Username"
+                  />
+                ) : (
+                  <h1 className="profile-name">{profileData.username}</h1>
                 )}
-              </div>
-              <div className="profile-details">
-                <div className="profile-main">
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="username"
-                      value={profileData.username}
-                      onChange={handleChange}
-                      className="edit-input"
-                    />
-                  ) : (
-                    <h1>{profileData.username}</h1>
-                  )}
-                  <div className="profile-stats">
-                    <div className="stat">
-                      <strong>{userPosts.length}</strong>
-                      <span>Posts</span>
-                    </div>
-                    <div className="stat">
-                      <strong>1,245</strong>
-                      <span>Followers</span>
-                    </div>
-                    <div className="stat">
-                      <strong>567</strong>
-                      <span>Following</span>
-                    </div>
-                  </div>
-                </div>
                 
                 <div className="profile-bio">
                   {isEditing ? (
@@ -111,7 +115,8 @@ const Profile = () => {
                       value={profileData.bio}
                       onChange={handleChange}
                       className="edit-textarea"
-                      rows="3"
+                      placeholder="Tell us about yourself..."
+                      rows="2"
                     />
                   ) : (
                     <p>{profileData.bio}</p>
@@ -120,7 +125,7 @@ const Profile = () => {
 
                 <div className="profile-meta">
                   {isEditing ? (
-                    <>
+                    <div className="edit-meta">
                       <input
                         type="url"
                         name="website"
@@ -137,64 +142,79 @@ const Profile = () => {
                         className="edit-input"
                         placeholder="Location"
                       />
-                    </>
+                    </div>
                   ) : (
                     <>
-                      <span className="meta-item">🌐 {profileData.website}</span>
-                      <span className="meta-item">📍 {profileData.location}</span>
-                      <span className="meta-item">📅 Joined March 2024</span>
+                      <div className="meta-item">
+                        <span className="meta-icon">🌐</span>
+                        <a href={profileData.website} className="meta-link">{profileData.website}</a>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-icon">📍</span>
+                        <span>{profileData.location}</span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-icon">📅</span>
+                        <span>Joined March 2024</span>
+                      </div>
                     </>
                   )}
                 </div>
+              </div>
 
-                {isEditing && (
-                  <button className="save-profile-btn" onClick={handleSave}>
-                    Save Changes
-                  </button>
-                )}
+              <div className="profile-stats">
+                <div className="stat-item">
+                  <div className="stat-number">3</div>
+                  <div className="stat-label">Posts</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-number">1,245</div>
+                  <div className="stat-label">Followers</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-number">567</div>
+                  <div className="stat-label">Following</div>
+                </div>
               </div>
             </div>
+
+            {isEditing && (
+              <button className="save-profile-btn" onClick={handleSave}>
+                Save Changes
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Profile Tabs */}
-        <div className="profile-tabs">
-          <button className="profile-tab active">Posts</button>
-          <button className="profile-tab">Media</button>
-          <button className="profile-tab">Likes</button>
-          <button className="profile-tab">Saved</button>
-        </div>
-
-        {/* Posts Grid */}
-        <div className="posts-grid">
-          {userPosts.map(post => (
-            <div key={post.id} className="post-card">
-              <div className="post-content">
-                {post.content}
+        {/* Posts Section */}
+        <div className="posts-section">
+          <h3 className="posts-title">Recent Posts</h3>
+          <div className="posts-grid">
+            {userPosts.map(post => (
+              <div key={post.id} className="post-card">
+                <div className="post-content">
+                  <p>{post.text}</p>
+                </div>
+                <div className="post-footer">
+                  <div className="post-stats">
+                    <span className="post-stat">❤️ {post.likes}</span>
+                    <span className="post-stat">💬 {post.comments}</span>
+                  </div>
+                  <span className="post-time">{post.time || "idk h ago"}</span>
+                </div>
               </div>
-              <div className="post-stats">
-                <span className="stat">❤️ {post.likes}</span>
-                <span className="stat">💬 {post.comments}</span>
-                <span className="post-time">{post.time}</span>
-              </div>
-              <div className="post-actions">
-                <button className="post-action-btn">Like</button>
-                <button className="post-action-btn">Comment</button>
-                <button className="post-action-btn">Share</button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {userPosts.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">📝</div>
-            <h3>No posts yet</h3>
-            <p>When you create posts, they'll appear here.</p>
-            <button className="create-first-post">Create your first post</button>
+            ))}
           </div>
-        )}
+
+          {userPosts.length === 0 && (
+            <div className="empty-posts">
+              <div className="empty-icon">📝</div>
+              <h4>No posts yet</h4>
+              <p>Share your thoughts with the community</p>
+              <button className="create-post-btn">Create first post</button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
