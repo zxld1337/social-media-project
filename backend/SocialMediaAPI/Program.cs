@@ -43,7 +43,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") 
+        policy.WithOrigins("http://localhost:3000") 
               .AllowCredentials() 
               .AllowAnyHeader()
               .AllowAnyMethod();
@@ -61,11 +61,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Cors before UseAuthentication and UseAuthorization
+app.UseCors("AllowReactApp");
+
 app.UseAuthentication(); //Used for Login
 app.UseAuthorization();
 app.MapControllers();
 
 app.MapGet("/", () => "Welcome to the Social Media API!");
-app.UseCors("AllowReactApp");
 
 app.Run();
