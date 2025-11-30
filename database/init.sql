@@ -1,25 +1,12 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Nov 10, 2025 at 01:33 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- MySQL 8.0 Compatible Init Script
+-- Database: socialdb
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `socialdb`
---
+-- Create database if it doesn't exist (optional, since docker-compose creates it)
+CREATE DATABASE IF NOT EXISTS `socialdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
+USE `socialdb`;
 
 -- --------------------------------------------------------
 
@@ -27,44 +14,19 @@ SET time_zone = "+00:00";
 -- Table structure for table `accounts`
 --
 
-CREATE TABLE `accounts` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
   `password` varchar(72) NOT NULL,
   `full_name` varchar(40) DEFAULT NULL,
   `email` varchar(40) NOT NULL,
   `phone_number` varchar(11) DEFAULT NULL,
-  `date_of_birth` varchar(20) DEFAULT NULL, -- Changed type from datetime to varchar(20)
-  `date_of_create` datetime NOT NULL DEFAULT current_timestamp(),
-  `profile_picture` blob DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
-
-CREATE TABLE `comments` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `text` text NOT NULL,
-  `date_of_comment` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `liked_posts`
---
-
-CREATE TABLE `liked_posts` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `post_id` int(11) NOT NULL,
-  `date_of_like` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `date_of_birth` varchar(20) DEFAULT NULL,
+  `date_of_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `profile_picture` blob DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
 
@@ -72,101 +34,58 @@ CREATE TABLE `liked_posts` (
 -- Table structure for table `posts`
 --
 
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `image` blob DEFAULT NULL,
   `text` text DEFAULT NULL,
-  `date_of_post` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `date_of_post` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id_fk` (`user_id`),
+  CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+-- --------------------------------------------------------
 
 --
--- Indexes for dumped tables
+-- Table structure for table `comments`
 --
 
---
--- Indexes for table `accounts`
---
-ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `text` text NOT NULL,
+  `date_of_comment` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `comments_user_id_fk` (`user_id`),
+  KEY `comments_post_id_fk` (`post_id`),
+  CONSTRAINT `comments_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comments_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+-- --------------------------------------------------------
 
 --
--- Indexes for table `comments`
+-- Table structure for table `liked_posts`
 --
-ALTER TABLE `comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `comments_user_id_fk` (`user_id`),
-  ADD KEY `comments_post_id_fk` (`post_id`);
 
---
--- Indexes for table `liked_posts`
---
+CREATE TABLE IF NOT EXISTS `liked_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `date_of_like` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `liked_user_id_fk` (`user_id`),
+  KEY `liked_post_id_fk` (`post_id`),
+  CONSTRAINT `liked_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `liked_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+-- --------------------------------------------------------
+
+-- Add unique constraint to prevent duplicate likes
 ALTER TABLE `liked_posts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `liked_user_id_fk` (`user_id`),
-  ADD KEY `liked_post_id_fk` (`post_id`);
+  ADD UNIQUE KEY `unique_user_post_like` (`user_id`, `post_id`);
 
---
--- Indexes for table `posts`
---
-ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id_fk` (`user_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `accounts`
---
-ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `liked_posts`
---
-ALTER TABLE `liked_posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `comments`
---
-ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
-  ADD CONSTRAINT `comments_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
-
---
--- Constraints for table `liked_posts`
---
-ALTER TABLE `liked_posts`
-  ADD CONSTRAINT `liked_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
-  ADD CONSTRAINT `liked_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
-
---
--- Constraints for table `posts`
---
-ALTER TABLE `posts`
-  ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
