@@ -100,7 +100,7 @@
 
   Test execution report: 
 
- | No. | Resoult |
+ | No. | Result |
  | --- | :---: |
  | 01 | passed |
  | 02 | passed |
@@ -124,6 +124,7 @@
    Date: 2025.11.29
 
    Status: Completed
+
 
 
 
