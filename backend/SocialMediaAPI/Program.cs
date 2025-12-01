@@ -27,8 +27,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //Register the BCrypt Hashing Service:
 builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
-//Register the MySQL Dapper Repository:
+//Register the MySQL Dapper Repositories:
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 //Register built-in HTML Encoder:
 builder.Services.AddSingleton(HtmlEncoder.Default);
@@ -36,6 +39,16 @@ builder.Services.AddSingleton(HtmlEncoder.Default);
 //Retrieve MySQL Connection String:
 builder.Services.AddScoped<IDbConnection>(sp => new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") 
+              .AllowCredentials() 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
 var app = builder.Build();
@@ -48,6 +61,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Cors before UseAuthentication and UseAuthorization
+app.UseCors("AllowReactApp");
+
 app.UseAuthentication(); //Used for Login
 app.UseAuthorization();
 app.MapControllers();

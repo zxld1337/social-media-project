@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Auth from './pages/Auth';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -16,7 +17,16 @@ function App() {
             path="/" 
             element={
               <PrivateRoute>
-                <Home />
+                <Home />                
+              </PrivateRoute>
+            } 
+          />
+
+          <Route 
+            path="/profile" 
+            element={
+              <PrivateRoute>
+                <Profile />
               </PrivateRoute>
             } 
           />

@@ -34,7 +34,6 @@ C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Scalar.AspNetCore.dll
-C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\SocialMediaAPI.sourcelink.json
 C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\appsettings.json
@@ -94,3 +93,25 @@ C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\S
 C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\SocialMediaAPI.pdb
 C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\SocialMediaAPI.genruntimeconfig.cache
 C:\Users\HP\Documents\EKKE\Labor\Social Media Git\social-media-project\backend\SocialMediaAPI\obj\Debug\net9.0\ref\SocialMediaAPI.dll
+<<<<<<< HEAD
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Dapper.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\Google.Protobuf.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\K4os.Compression.LZ4.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\K4os.Compression.LZ4.Streams.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\K4os.Hash.xxHash.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\MySql.Data.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\System.Security.Permissions.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\System.Windows.Extensions.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\ZstdSharp.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win-x64\native\comerr64.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win-x64\native\gssapi64.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win-x64\native\k5sprt64.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win-x64\native\krb5_64.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win-x64\native\krbcc64.dll
+C:\School\sem5\AFP\social-media-project\backend\SocialMediaAPI\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+=======
+>>>>>>> 482a14f95b3734b3f8271e2b4d53f88822e587bd

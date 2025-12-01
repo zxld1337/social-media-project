@@ -1,14 +1,13 @@
 version: '3.8'
 
 services:
-  # MySQL adatbázis
   db:
     image: mysql:8.0
     container_name: social-media-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: socialmedia
+      MYSQL_DATABASE: socialdb  # Changed from socialmedia
       MYSQL_USER: apiuser
       MYSQL_PASSWORD: apipassword
     ports:
@@ -19,7 +18,6 @@ services:
     networks:
       - social-media-network
 
-  # .NET Core API
   backend:
     build:
       context: ./backend
@@ -28,7 +26,7 @@ services:
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Database=socialmedia;User=apiuser;Password=apipassword;
+      - ConnectionStrings__DefaultConnection=Server=db;Database=socialdb;User=apiuser;Password=apipassword;
     ports:
       - "5000:8080"
     depends_on:
@@ -36,7 +34,6 @@ services:
     networks:
       - social-media-network
 
-  # React Frontend
   frontend:
     build:
       context: ./frontend
@@ -44,7 +41,7 @@ services:
     container_name: social-media-frontend
     restart: always
     environment:
-      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_API_URL=http://backend:8080/api
     ports:
       - "3000:80"
     depends_on:
@@ -52,7 +49,6 @@ services:
     networks:
       - social-media-network
 
-  # phpMyAdmin (opcionális, dev környezethez)
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: social-media-phpmyadmin
