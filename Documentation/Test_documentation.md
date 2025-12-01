@@ -42,15 +42,15 @@
 
   OS/Host:
 
-     Arch Linux (rolling release, updated 29th of november 2025) <br>
-     Kernel Version: 6.11.0-arch1-1 ? <br>
-     Docker Version: - <br>
+     Arch Linux (rolling release, updated 29th of november 2025) 
+     Kernel Version: 6.11.0-arch1-1 ? 
+     Docker Version: - 
 
 
-     Windows 11 (latest release, updated 29th of november 2025) <br>
-     Edition: Windows 11 Pro <br>
-     Build Number: 26100.7171 <br>
-     Docker Desktop Version: 29.0.1 <br>
+     Windows 11 (latest release, updated 29th of november 2025) 
+     Edition: Windows 11 Pro 
+     Build Number: 26100.7171
+     Docker Desktop Version: 29.0.1 
 
 
   Container:
@@ -73,17 +73,11 @@
 
 | ID | Test Case | Preconditions | Steps | Expected Result |
 | --- | --- | --- | --- | --- |
- 
 | 01 | Verify Docker containers run | Docker installed | Run docker-compose up | Container starts without errors |
-
 | 02 | Access phpMyAdmin | Containers running | Open http://localhost:3000 | phpMyAdmin login page loads |
-
 | 03 | Connect to DB | phpMyAdmin accessible | Login with DB credentials | Database schema visible |
-
 | 04 | User Registration | WebApp running | Navigate to signup page -> Enter valid details -> Submit | New user record created in DB |
-
 | 05 | User Login | Registered user exists | Navigate to login page -> Enter credentials -> Submit | User successfully logged in, redirected to home |
-
 | 06 | Share a post | Logged in as user | Navigate to post -> Create post consisting of text and an image | New post shows up on feed and in DB |
 
 
@@ -108,6 +102,7 @@
 
   Test execution report: 
 
+ | No. | Resoult |
  | 01 | passed |
  | 02 | passed |
  | 03 | passed |
