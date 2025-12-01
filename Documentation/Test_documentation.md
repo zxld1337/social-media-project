@@ -103,6 +103,7 @@
   Test execution report: 
 
  | No. | Resoult |
+ | --- | --- |
  | 01 | passed |
  | 02 | passed |
  | 03 | passed |
@@ -120,9 +121,9 @@
 
 
 
-   Tester: [Suhajda Karina]
+   Tester: Suhajda Karina
 
-   Date: [2025.11.29]
+   Date: 2025.11.29
 
    Status: Completed
 
