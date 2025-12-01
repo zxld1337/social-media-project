@@ -6,7 +6,7 @@
 
 
 
-##### 1\. Test Overview
+##### 1\. Test overview
 
 
 
@@ -28,7 +28,7 @@
 
 
 
-##### 2.1 Out of Scope: Advanced features (posts, comments, likes, notifications)
+##### 2.1 Out of scope: Advanced features (posts, comments, likes, notifications)
 
  
 
@@ -36,38 +36,38 @@
 
 
 
-##### 3\. Test Environment X
+##### 3\. Test environment X
 
 
 
   OS/Host:
 
-     Arch Linux (rolling release, updated 29th of november 2025) 
-     Kernel Version: 6.11.0-arch1-1 ? 
-     Docker Version: - 
+  - Arch Linux (rolling release, updated 29th of november 2025) 
+  - Kernel Version: 6.11.0-arch1-1 ? 
+  - Docker Version: - 
 
 
-     Windows 11 (latest release, updated 29th of november 2025) 
-     Edition: Windows 11 Pro 
-     Build Number: 26100.7171
-     Docker Desktop Version: 29.0.1 
+  - Windows 11 (latest release, updated 29th of november 2025) 
+  - Edition: Windows 11 Pro 
+  - Build Number: 26100.7171
+  - Docker Desktop Version: 29.0.1 
 
 
   Container:
 
-   Webapp (React)
+  - Webapp (React)
 
   
   Ports:
 
-   Frontend: localhost:3000 <br>
-   Backend API: localhost:5000 <br>
-   phpMyAdmin: localhost:8080 <br>
-   MySQL: localhost:3300 <br>
+   - Frontend: localhost:3000 
+   - Backend API: localhost:5000 
+   - phpMyAdmin: localhost:8080 
+   - MySQL: localhost:3300 
 
 
 
-##### 4\. Test Cases
+##### 4\. Test cases
 
 
 
@@ -82,28 +82,26 @@
 
 
 
-##### 5\. Test Data
+##### 5\. Test data
 
 
 
   Sample user:
 
  - Username: testuser
-
  - Email: testuser@example.com
-
  - Password: test123
 
 
 
-##### 6\. Expected Deliverables X
+##### 6\. Expected deliverables 
 
 
 
   Test execution report: 
 
  | No. | Resoult |
- | --- | --- |
+ | --- | :---: |
  | 01 | passed |
  | 02 | passed |
  | 03 | passed |
@@ -126,5 +124,6 @@
    Date: 2025.11.29
 
    Status: Completed
+
 
 
