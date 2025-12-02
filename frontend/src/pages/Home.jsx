@@ -197,7 +197,7 @@ const Home = () => {
             <h4>Suggestions for You</h4>
             {[...users.filter(x => x.id !== user.id)]
             .sort(() => Math.random() - 0.5)
-            .slice(0,3)
+            .slice(0,2)
             .map((suggestedUser, index) => (
               <div key={index} className="suggestion-item">
                 <img
