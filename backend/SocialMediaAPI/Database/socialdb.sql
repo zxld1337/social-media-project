@@ -81,6 +81,17 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Table structure for table `follows`
+--
+
+CREATE TABLE `follows` (
+  `id` int(11) NOT NULL,
+  `following_id` int(11) NOT NULL,
+  `follower_id` int(11) NOT NULL,
+  `date_of_follow` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -115,6 +126,14 @@ ALTER TABLE `posts`
   ADD KEY `user_id_fk` (`user_id`);
 
 --
+-- Indexes for table `follows`
+--
+ALTER TABLE `follows`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `following_id_fk` (`following_id`),
+  ADD KEY `follower_id_fk` (`follower_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -143,6 +162,12 @@ ALTER TABLE `posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `follows`
+--
+ALTER TABLE `follows`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -150,21 +175,30 @@ ALTER TABLE `posts`
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
-  ADD CONSTRAINT `comments_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
+  ADD CONSTRAINT `comments_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `comments_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `liked_posts`
 --
 ALTER TABLE `liked_posts`
-  ADD CONSTRAINT `liked_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
-  ADD CONSTRAINT `liked_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
+  ADD CONSTRAINT `liked_post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `liked_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`);
+  ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `follows`
+--
+ALTER TABLE `follows`
+  ADD CONSTRAINT `following_id_fk` FOREIGN KEY (`following_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `follower_id_fk` FOREIGN KEY (`follower_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE,
+  ADD UNIQUE KEY `unique_follow` (`following_id`, `follower_id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
