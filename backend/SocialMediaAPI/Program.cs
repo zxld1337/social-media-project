@@ -19,7 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
     {
         options.Cookie.Name = "SocialAppAuth"; // Custom name for the authentication cookie
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // How long the cookie lasts
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(120); // How long the cookie lasts
         options.SlidingExpiration = true; // Resets expiration on activity
         options.LoginPath = "/login"; // Optional: specify where to redirect unauthorized users
     });
