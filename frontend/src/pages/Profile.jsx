@@ -164,7 +164,7 @@ const Profile = () => {
 
               <div className="profile-stats">
                 <div className="stat-item">
-                  <div className="stat-number">3</div>
+                  <div className="stat-number">{userPosts.length}</div>
                   <div className="stat-label">Posts</div>
                 </div>
                 <div className="stat-item">
