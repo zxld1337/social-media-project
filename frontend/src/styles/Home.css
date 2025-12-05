@@ -166,65 +166,6 @@
   gap: 1rem;
 }
 
-.post-card {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.post-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.post-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.post-user {
-  display: flex;
-  flex-direction: column;
-}
-
-.post-user strong {
-  color: #333;
-}
-
-.post-time {
-  color: #666;
-  font-size: 0.8rem;
-}
-
-.post-content {
-  color: #333;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-}
-
-.post-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.action-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: none;
-  color: #666;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.action-btn:hover {
-  background-color: #f0f0f0;
-}
-
 /* Profile Sidebar */
 .profile-sidebar {
   position: sticky;
