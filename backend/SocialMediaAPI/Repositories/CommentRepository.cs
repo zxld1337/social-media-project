@@ -25,7 +25,7 @@ namespace SocialMediaAPI.Repositories
         public async Task<IEnumerable<CommentReadDto>> GetCommentsByPostIdAsync(int postId)
         {
             //Display comments chronologically
-            var sql = @"SELECT c.id, c.user_id, c.post_id, c.text, c.date_of_comment, a.username AS Username
+            var sql = @"SELECT c.id AS Id, c.user_id AS UserId, c.post_id AS PostId, c.text AS Text, c.date_of_comment AS DateOfComment, a.username AS Username
                         FROM comments c INNER JOIN accounts a ON c.user_id = a.id WHERE c.post_id = @PostId ORDER BY c.date_of_comment ASC";
 
             return await _connection.QueryAsync<CommentReadDto>(sql, new { PostId = postId });

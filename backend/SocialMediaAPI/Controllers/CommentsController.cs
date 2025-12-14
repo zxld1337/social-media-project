@@ -33,6 +33,12 @@ namespace SocialMediaAPI.Controllers
         {
             var comments = await _repository.GetCommentsByPostIdAsync(postId);
 
+            if (!comments.Any())
+            {
+                //Return 200 OK with an empty list instead of 404
+                return Ok(Enumerable.Empty<CommentReadDto>());
+            }
+
             return Ok(comments);
         }
 
