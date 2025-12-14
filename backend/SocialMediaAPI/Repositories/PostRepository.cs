@@ -26,6 +26,7 @@ namespace SocialMediaAPI.Repositories
         public async Task<IEnumerable<PostReadDto>> GetAllPostsAsync()
         {
             var sql = @"SELECT p.id, p.user_id AS UserId, p.image, p.text, p.date_of_post AS DateOfPost, a.username AS Username
+                        (SELECT COUNT(l.id) FROM likes l WHERE l.post_id = p.id) AS LikeCount
                         FROM posts p INNER JOIN accounts a ON p.user_id = a.id ORDER BY p.date_of_post DESC";
             return await _connection.QueryAsync<PostReadDto>(sql);
         }
@@ -33,6 +34,7 @@ namespace SocialMediaAPI.Repositories
         public async Task<PostReadDto?> GetPostByIdAsync(int id)
         {
             var sql = @"SELECT p.id, p.user_id AS UserId, p.image, p.text, p.date_of_post AS DateOfPost, a.username AS Username
+                        (SELECT COUNT(l.id) FROM likes l WHERE l.post_id = p.id) AS LikeCount
                         FROM posts p INNER JOIN accounts a ON p.user_id = a.id WHERE p.id = @Id";
             return await _connection.QuerySingleOrDefaultAsync<PostReadDto>(sql, new { Id = id });
         }

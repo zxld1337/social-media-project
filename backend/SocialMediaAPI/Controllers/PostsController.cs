@@ -59,6 +59,7 @@ namespace SocialMediaAPI.Controllers
                 p.Username,
                 p.Image,
                 p.Text,
+                p.LikeCount,
                 //FIX: Formatting DateTime to a string
                 DateOfPost = p.DateOfPost?.ToString("yyyy-MM-ddTHH:mm:ssZ")
             });
@@ -85,6 +86,7 @@ namespace SocialMediaAPI.Controllers
                 post.Username,
                 post.Image,
                 post.Text,
+                post.LikeCount,
                 // FIX: Formatting DateTime to a string
                 DateOfPost = post.DateOfPost?.ToString("yyyy-MM-ddTHH:mm:ssZ")
             };

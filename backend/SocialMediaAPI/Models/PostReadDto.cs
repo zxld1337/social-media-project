@@ -10,5 +10,8 @@
 
         //Display username with post
         public string? Username { get; set; }
+
+        //Display like count with post
+        public int LikeCount { get; set; }
     }
 }
