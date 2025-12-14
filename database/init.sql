@@ -84,6 +84,25 @@ CREATE TABLE IF NOT EXISTS `liked_posts` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `follows`
+--
+
+CREATE TABLE IF NOT EXISTS `follows` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `following_id` int(11) NOT NULL,
+  `follower_id` int(11) NOT NULL,
+  `date_of_follow` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_follow` (`following_id`, `follower_id`),
+  KEY `following_id_fk` (`following_id`),
+  KEY `follower_id_fk` (`follower_id`),
+  CONSTRAINT `following_id_fk` FOREIGN KEY (`following_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE,
+  CONSTRAINT `follower_id_fk` FOREIGN KEY (`follower_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
 -- Add unique constraint to prevent duplicate likes
 ALTER TABLE `liked_posts`
   ADD UNIQUE KEY `unique_user_post_like` (`user_id`, `post_id`);
