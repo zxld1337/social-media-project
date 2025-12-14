@@ -33,17 +33,18 @@ namespace SocialMediaAPI.Controllers
         //List all accounts - for simplicity/testing - usually only accessed by admin
         [HttpGet("api/users")]
         [AllowAnonymous] //ONLY FOR TESTING!! REMOVE THIS LINE LATER!
-        public async Task<ActionResult<IEnumerable<AccountReadDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<object>>> GetAll()
         {
             var accounts = await _repository.GetAllAccountsAsync();
 
-            var readDtos = accounts.Select(a => new AccountReadDto
+            var readDtos = accounts.Select(a => new
             {
-                Id = a.Id,
-                Username = a.Username,
-                Email = a.Email,
-                FullName = a.FullName,
-                DateOfCreate = a.DateOfCreate
+                a.Id,
+                a.Username,
+                a.Email,
+                a.FullName,
+                //FIX: Formatting DateTime? to a string
+                DateOfCreate = a.DateOfCreate?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
             });
 
             return Ok(readDtos);
@@ -51,7 +52,7 @@ namespace SocialMediaAPI.Controllers
 
         //Access data about one specific account (using account id)
         [HttpGet("api/users/{id:int}")]
-        public async Task<ActionResult<AccountReadDto>> GetById(int id)
+        public async Task<ActionResult<object>> GetById(int id)
         {
             var account = await _repository.GetAccountByIdAsync(id);
 
@@ -60,25 +61,23 @@ namespace SocialMediaAPI.Controllers
                 return NotFound();
             }
 
-            //Map to DTO for safety (excluding the hashed password)
-            var readDto = new AccountReadDto
-            {
-                Id = account.Id,
-                Username = account.Username,
-                Email = account.Email,
-                FullName = account.FullName,
-                PhoneNumber = account.PhoneNumber,
-                DateOfBirth = account.DateOfBirth,
-                DateOfCreate = account.DateOfCreate,
-                ProfilePicture = account.ProfilePicture
-            };
+            //Check ownership
+            bool isOwner = id == GetCurrentUserId();
 
-            //Only return sensitive fields (like DateOfBirth/Phone) if the user is viewing their own profile
-            if (id != GetCurrentUserId())
+            //Map to object for safety (excluding the hashed password)
+            var readDto = new
             {
-                readDto.PhoneNumber = null;
-                readDto.DateOfBirth = null;
-            }
+                account.Id,
+                account.Username,
+                account.Email,
+                account.FullName,
+                //Only return sensitive fields (like DateOfBirth/Phone) if the user is viewing their own profile
+                PhoneNumber = isOwner ? account.PhoneNumber : null,
+                DateOfBirth = isOwner ? account.DateOfBirth : null,
+                //FIX: Formatting DateTime? to a string
+                DateOfCreate = account.DateOfCreate?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                account.ProfilePicture
+            };
 
             return Ok(readDto);
         }

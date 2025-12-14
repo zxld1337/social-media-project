@@ -29,7 +29,7 @@ namespace SocialMediaAPI.Controllers
         //Access a list of all comments for a specific post
         [HttpGet("api/posts/{postId:int}/comments")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<CommentReadDto>>> GetByPostId(int postId)
+        public async Task<ActionResult<IEnumerable<object>>> GetByPostId(int postId)
         {
             var comments = await _repository.GetCommentsByPostIdAsync(postId);
 
@@ -39,7 +39,18 @@ namespace SocialMediaAPI.Controllers
                 return Ok(Enumerable.Empty<CommentReadDto>());
             }
 
-            return Ok(comments);
+            var formattedComments = comments.Select(c => new
+            {
+                c.Id,
+                c.UserId,
+                c.PostId,
+                c.Username,
+                c.Text,
+                //FIX: Formatting DateTime to a string
+                DateOfComment = c.DateOfComment?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            });
+
+            return Ok(formattedComments);
         }
 
         //Create a comment

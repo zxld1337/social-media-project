@@ -25,7 +25,7 @@ namespace SocialMediaAPI.Repositories
 
         //Helper SQL join query pattern
         private const string FollowsJoinQuery = @"SELECT CASE WHEN f.follower_id = @UserId THEN f.following_id ELSE f.follower_id
-                                                  END AS User_Id, a.username AS Username, f.date_of_follow FROM follows f
+                                                  END AS UserId, a.username AS Username, f.date_of_follow AS DateOfFollow FROM follows f
                                                   INNER JOIN accounts a ON a.id = CASE WHEN f.follower_id = @UserId THEN f.following_id 
                                                   ELSE f.follower_id END";
 
@@ -46,7 +46,7 @@ namespace SocialMediaAPI.Repositories
         //Check if the relationship exists
         public async Task<Follows?> GetFollowRelationshipAsync(int followerId, int followingId)
         {
-            var sql = @"SELECT id, following_id, follower_id, date_of_follow FROM follows
+            var sql = @"SELECT id, following_id AS FollowingId, follower_id AS FollowerId, date_of_follow AS DateOfFollow FROM follows
                         WHERE follower_id = @FollowerId AND following_id = @FollowingId";
 
             return await _connection.QuerySingleOrDefaultAsync<Follows>(sql, new

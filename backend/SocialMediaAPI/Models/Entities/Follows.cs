@@ -5,6 +5,6 @@
         public required int Id { get; set; }
         public required int FollowingId { get; set; }
         public required int FollowerId { get; set; }
-        public string? DateOfFollow { get; set; }
+        public DateTime? DateOfFollow { get; set; }
     }
 }

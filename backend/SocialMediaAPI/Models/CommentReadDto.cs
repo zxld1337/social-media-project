@@ -6,7 +6,7 @@
         public int UserId { get; set; }
         public int PostId { get; set; }
         public string Text { get; set; } = string.Empty;
-        public string? DateOfComment { get; set; }
+        public DateTime? DateOfComment { get; set; }
 
         //Display username with comment
         public string? Username { get; set; }

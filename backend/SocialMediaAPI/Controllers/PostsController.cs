@@ -48,9 +48,20 @@ namespace SocialMediaAPI.Controllers
         //List every post - for simplicity/testing - usually only accessed by admin
         [HttpGet("api/posts")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<PostReadDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<object>>> GetAll()
         {
-            var readDtos = await _repository.GetAllPostsAsync();
+            var posts = await _repository.GetAllPostsAsync();
+
+            var readDtos = posts.Select(p => new
+            {
+                p.Id,
+                p.UserId,
+                p.Username,
+                p.Image,
+                p.Text,
+                //FIX: Formatting DateTime to a string
+                DateOfPost = p.DateOfPost?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            });
 
             return Ok(readDtos);
         }
@@ -58,11 +69,25 @@ namespace SocialMediaAPI.Controllers
         //Access data about one specific post (using account id)
         [HttpGet("api/posts/{id:int}")]
         [AllowAnonymous]
-        public async Task<ActionResult<PostReadDto>> GetById(int id)
+        public async Task<ActionResult<object>> GetById(int id)
         {
-            var readDto = await _repository.GetPostByIdAsync(id);
+            var post = await _repository.GetPostByIdAsync(id);
 
-            if (readDto == null) return NotFound();
+            if (post == null) 
+            {
+                return NotFound();
+            }
+
+            var readDto = new
+            {
+                post.Id,
+                post.UserId,
+                post.Username,
+                post.Image,
+                post.Text,
+                // FIX: Formatting DateTime to a string
+                DateOfPost = post.DateOfPost?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            };
 
             return Ok(readDto);
         }

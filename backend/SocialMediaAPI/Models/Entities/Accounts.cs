@@ -9,7 +9,7 @@
         public required string Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? DateOfBirth { get; set; }
-        public string? DateOfCreate { get; set; }
+        public DateTime? DateOfCreate { get; set; }
         public byte[]? ProfilePicture { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace SocialMediaAPI.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly IDbConnection _connection;
-        private readonly string _allAccountFields = "id, username, password, full_name, email, phone_number, date_of_birth, date_of_create, profile_picture";
+        private readonly string _allAccountFields = "id, username, password, full_name AS FullName, email, phone_number AS PhoneNumber, date_of_birth AS DateOfBirth, date_of_create AS DateOfCreate, profile_picture AS ProfilePicture";
 
         public AccountRepository(IDbConnection connection)
         {

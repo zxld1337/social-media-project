@@ -26,10 +26,19 @@ namespace SocialMediaAPI.Controllers
 
         //Access a list of the accounts who a user is FOLLOWING
         [HttpGet("api/follow/{userId:int}/following")]
-        public async Task<ActionResult<IEnumerable<FollowReadDto>>> GetFollowing(int userId)
+        public async Task<ActionResult<IEnumerable<object>>> GetFollowing(int userId)
         {
             var following = await _repository.GetFollowingListAsync(userId);
-            return Ok(following);
+
+            var formattedFollowing = following.Select(f => new
+            {
+                f.UserId,
+                f.Username,
+                //FIX: Formatting DateTime to a string
+                DateOfFollow = f.DateOfFollow?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            });
+
+            return Ok(formattedFollowing);
         }
 
         //Access a list of the accounts whom by a user is FOLLOWED
@@ -37,7 +46,16 @@ namespace SocialMediaAPI.Controllers
         public async Task<ActionResult<IEnumerable<FollowReadDto>>> GetFollowers(int userId)
         {
             var followers = await _repository.GetFollowersListAsync(userId);
-            return Ok(followers);
+
+            var formattedFollowers = followers.Select(f => new
+            {
+                f.UserId,
+                f.Username,
+                //FIX: Formatting DateTime to a string
+                DateOfFollow = f.DateOfFollow?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            });
+
+            return Ok(formattedFollowers);
         }
 
         //Create a follow
