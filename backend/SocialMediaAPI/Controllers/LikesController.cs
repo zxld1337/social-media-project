@@ -23,6 +23,24 @@ namespace SocialMediaAPI.Controllers
             return int.Parse(idClaim ?? "0");
         }
 
+        //List people who liked a given post
+        [HttpGet("api/posts/{postId}/likes")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<object>>> GetLikesByPostId(int postId)
+        {
+            var likes = await _repository.GetLikesByPostIdAsync(postId);
+
+            var formattedLikes = likes.Select(l => new
+            {
+                l.UserId,
+                l.Username,
+                //FIX: Formatting DateTime to a string
+                DateOfLike = l.DateOfLike?.ToString("yyyy-MM-ddTHH:mm:ssZ")
+            });
+
+            return Ok(formattedLikes);
+        }
+
         //Like a post
         [HttpPost("api/posts/{postId:int}/like")]
         public async Task<IActionResult> LikePost(int postId)

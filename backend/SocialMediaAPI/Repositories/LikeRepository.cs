@@ -2,6 +2,7 @@
 using Dapper;
 using System.Data;
 using System.Threading.Tasks;
+using SocialMediaAPI.Models;
 
 namespace SocialMediaAPI.Repositories
 {
@@ -9,6 +10,7 @@ namespace SocialMediaAPI.Repositories
     {
         //Check existence (Crucial for preventing duplicate likes)
         Task<LikedPosts?> GetLikeByKeysAsync(int userId, int postId);
+        Task<IEnumerable<LikeReadDto>> GetLikesByPostIdAsync(int postId);
         Task<int> CreateLikeAsync(int userId, int postId);
         Task<bool> DeleteLikeAsync(int userId, int postId);
     }
@@ -23,9 +25,18 @@ namespace SocialMediaAPI.Repositories
 
         public async Task<LikedPosts?> GetLikeByKeysAsync(int userId, int postId)
         {
-            var sql = @"SELECT id, user_id, post_id, date_of_like FROM liked_posts WHERE user_id = @UserId AND post_id = @PostId";
+            var sql = @"SELECT id, user_id AS UserId, post_id AS PostId, date_of_like AS DateOfLike FROM liked_posts
+                        WHERE user_id = @UserId AND post_id = @PostId";
 
             return await _connection.QuerySingleOrDefaultAsync<LikedPosts>(sql, new { UserId = userId, PostId = postId });
+        }
+
+        public async Task<IEnumerable<LikeReadDto>> GetLikesByPostIdAsync(int postId)
+        {
+            var sql = @"SELECT l.user_id AS UserId, a.username AS Username, l.date_of_like AS DateOfLike FROM likes l
+                        INNER JOIN accounts a ON l.user_id = a.id WHERE l.post_id = @PostId ORDER BY l.date_of_like DESC";
+
+            return await _connection.QueryAsync<LikeReadDto>(sql, new { PostId = postId });
         }
 
         public async Task<int> CreateLikeAsync(int userId, int postId)
