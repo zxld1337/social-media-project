@@ -15,7 +15,7 @@ const Home = () => {
   const [feedPosts, setFeedPosts] = useState([]);
   const [explorePosts, setExplorePosts] = useState([]);
 
-  const [activeTab, setActiveTab] = useState("feed");
+  const [activeTab, setActiveTab] = useState("explore");
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const Home = () => {
       setLoading(true);
       try {
         const postsData = await fetchPosts();
-        setFeedPosts(postsData);
+        setExplorePosts(postsData);
       } catch (err) {
         setError("Failed to load posts");
       }
@@ -58,7 +58,7 @@ const Home = () => {
     logout();
     navigate("/auth");
   };
-  
+
   // handle create post
   const handleCreatePost = async () => {
     const text = document.querySelector(".post-input").value;
@@ -111,18 +111,18 @@ const Home = () => {
           <div className="nav-brand">SocialApp</div>
           <div className="nav-tabs">
             <button
-              className={`tab-button ${activeTab === "feed" ? "active" : ""}`}
-              onClick={() => setActiveTab("feed")}
-            >
-              Feed
-            </button>
-            <button
               className={`tab-button ${
                 activeTab === "explore" ? "active" : ""
               }`}
               onClick={() => setActiveTab("explore")}
             >
               Explore
+            </button>
+            <button
+              className={`tab-button ${activeTab === "feed" ? "active" : ""}`}
+              onClick={() => setActiveTab("feed")}
+            >
+              Feed
             </button>
           </div>
           <div className="nav-actions">

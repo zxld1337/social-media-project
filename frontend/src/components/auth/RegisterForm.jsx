@@ -30,7 +30,7 @@ const RegisterForm = ({ onSuccess, onToggle }) => {
       if (response.status === 201) { // Registration successful
         
         const data = await response.json();
-
+        
         const userData = {
           id: data.accountId,
           email: formData.email,

@@ -20,6 +20,7 @@ const CommentsModal = ({ post, onClose }) => {
       setError(null);
       try {
         const commentsData = await fetchCommentsByPostId(post.id);
+        console.log('Fetched comments:', commentsData);
         setComments(commentsData);
       } catch (err) {
         setError('Failed to load comments');
@@ -42,12 +43,13 @@ const CommentsModal = ({ post, onClose }) => {
     try {
       const result = await createComment(post.id, newComment);
       
+      console.log('Created comment:', result);
       // Create new comment object for display
       const newCommentObj = {
-        id: result.CommentId,
+        id: result.commentId,
         username: user.username,
         userId: user.id,
-        comment: newComment,
+        text: newComment,
         time: 'Just now',
         likes: 0
       };
@@ -162,16 +164,8 @@ const CommentsModal = ({ post, onClose }) => {
                         </button>
                       )}
                     </div>
-                    <p className="comment-text">{comment.comment}</p>
-                    <div className="comment-actions">
-                      <button 
-                        className="comment-like-btn"
-                        onClick={() => handleLikeComment(comment.id)}
-                      >
-                        ❤️ {comment.likes || 0}
-                      </button>
-                      <button className="comment-reply-btn">Reply</button>
-                    </div>
+                    <p className="comment-text">{comment.text}</p>
+                    
                   </div>
                 </div>
               ))}
