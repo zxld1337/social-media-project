@@ -107,4 +107,12 @@ CREATE TABLE IF NOT EXISTS `follows` (
 ALTER TABLE `liked_posts`
   ADD UNIQUE KEY `unique_user_post_like` (`user_id`, `post_id`);
 
+
+-- -- Dumping data for table `accounts`
+INSERT INTO `accounts` (`id`, `username`, `password`, `full_name`, `email`, `phone_number`, `date_of_birth`, `date_of_create`, `profile_picture`) VALUES
+(1, 'Ferenc', '$2a$12$IINjlJez5tcJ9217gqBRG.EFZIeeA6Lx5WvXXDtuBEcR893YvgvUq', NULL, 'f@gmail.com', NULL, NULL, '2025-12-14 14:46:00', NULL),
+(2, 'Kerepesi', '$2a$12$FKhMFzgaDswzYNeO03dmKOiI6qs3eCbPL8zxD8o9DggW4cBTCKinC', NULL, 'k@gmail.com', NULL, NULL, '2025-12-14 14:48:12', NULL),
+(3, 'Levente', '$2a$12$ufuxxAGNw1le3KTLbNIW2Ou77rSLpwHa5DRmpCXfKTwepejh3TNG6', NULL, 'l@gmail.com', NULL, NULL, '2025-12-14 14:52:00', NULL);
+
+
 COMMIT;
