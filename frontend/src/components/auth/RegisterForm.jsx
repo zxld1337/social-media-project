@@ -27,19 +27,8 @@ const RegisterForm = ({ onSuccess, onToggle }) => {
         }
       );
 
-      if (response.status === 201) { // Registration successful
-        
-        const data = await response.json();
-        
-        const userData = {
-          id: data.accountId,
-          email: formData.email,
-          username: formData.username,
-        };
-
-        onSuccess(userData);
-
-      } else if (response.status === 409) { // Username conflict
+      if (response.status === 201) onSuccess();
+      else if (response.status === 409) { // Username conflict
         
         const errorData = await response.json();
         alert(errorData.message || "Username is already taken!");
