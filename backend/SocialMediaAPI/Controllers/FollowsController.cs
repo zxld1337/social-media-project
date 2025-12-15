@@ -60,17 +60,17 @@ namespace SocialMediaAPI.Controllers
 
         //Create a follow
         [HttpPost("api/follow")]
-        public async Task<IActionResult> FollowUser(int followingId)
+        public async Task<IActionResult> FollowUser([FromBody] FollowRequest dto)
         {
             int followerId = GetCurrentUserId();
 
-            if (followerId == followingId)
+            if (followerId == dto.FollowingId)
             {
                 return BadRequest(new { Message = "Cannot follow yourself." });
             }
 
             //Check if the relationship already exists
-            var existingFollow = await _repository.GetFollowRelationshipAsync(followerId, followingId);
+            var existingFollow = await _repository.GetFollowRelationshipAsync(followerId, dto.FollowingId);
 
             if (existingFollow != null)
             {
@@ -80,7 +80,7 @@ namespace SocialMediaAPI.Controllers
             try
             {
                 //Create the follow record
-                int newFollowId = await _repository.CreateFollowAsync(followerId, followingId);
+                int newFollowId = await _repository.CreateFollowAsync(followerId, dto.FollowingId);
 
                 return Created(string.Empty, new { Message = "User followed successfully.", FollowId = newFollowId });
             }
