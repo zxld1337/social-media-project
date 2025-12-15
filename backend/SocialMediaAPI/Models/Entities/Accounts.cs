@@ -11,5 +11,8 @@
         public string? DateOfBirth { get; set; }
         public DateTime? DateOfCreate { get; set; }
         public byte[]? ProfilePicture { get; set; }
+
+        public int FollowerCount { get; set; }
+        public int FollowingCount { get; set; }
     }
 }

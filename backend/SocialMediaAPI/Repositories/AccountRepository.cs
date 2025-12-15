@@ -65,7 +65,11 @@ namespace SocialMediaAPI.Repositories
 
         public async Task<Accounts?> GetAccountByIdAsync(int id)
         {
-            var sql = $"SELECT {_allAccountFields} FROM accounts WHERE id = @Id";
+            var sql = @$"SELECT a.id, a.username, a.password, a.full_name AS FullName, a.email, a.phone_number AS PhoneNumber, a.date_of_birth AS DateOfBirth, a.date_of_create AS DateOfCreate, a.profile_picture AS ProfilePicture, 
+                         (SELECT COUNT(*) FROM follows f WHERE f.following_id = a.id) AS FollowerCount,
+                         (SELECT COUNT(*) FROM follows f WHERE f.follower_id = a.id) AS FollowingCount
+                         FROM accounts a WHERE a.id = @Id";
+
             return await _connection.QuerySingleOrDefaultAsync<Accounts>(sql, new { Id = id });
         }
 

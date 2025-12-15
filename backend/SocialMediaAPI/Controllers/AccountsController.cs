@@ -76,7 +76,9 @@ namespace SocialMediaAPI.Controllers
                 DateOfBirth = isOwner ? account.DateOfBirth : null,
                 //FIX: Formatting DateTime? to a string
                 DateOfCreate = account.DateOfCreate?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                account.ProfilePicture
+                account.ProfilePicture,
+                account.FollowerCount,
+                account.FollowingCount
             };
 
             return Ok(readDto);
