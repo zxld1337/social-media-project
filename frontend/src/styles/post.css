@@ -1,4 +1,4 @@
-/* Post.css */
+/* Updated Post.css */
 .post-card {
   background-color: white;
   padding: 1.5rem;
@@ -16,6 +16,7 @@
 .post-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -29,6 +30,7 @@
 .post-user {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .post-user strong {
@@ -41,11 +43,53 @@
   font-size: 0.8rem;
 }
 
+.follow-btn {
+  padding: 0.4rem 1rem;
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 85px;
+}
+
+.follow-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.follow-btn.following {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.follow-btn.following:hover {
+  background-color: #fff0f0;
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
 .post-content {
   color: #333;
   line-height: 1.5;
   margin-bottom: 1rem;
   font-size: 1rem;
+}
+
+.post-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-stat {
+  color: #666;
+  font-size: 0.85rem;
 }
 
 .post-actions {
