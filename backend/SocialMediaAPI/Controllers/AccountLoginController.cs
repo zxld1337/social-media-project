@@ -69,7 +69,7 @@ namespace SocialMediaAPI.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                           new ClaimsPrincipal(claimsIdentity), authProperties);
 
-            return Ok(new { Message = "Login successful.", Username = account.Username });
+            return Ok(new { Message = "Login successful.", User = new { account.Id, account.Username, account.Email } });
         }
 
         //Add Post method for logout:
