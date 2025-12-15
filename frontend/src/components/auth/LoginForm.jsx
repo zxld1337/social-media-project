@@ -27,9 +27,9 @@ const LoginForm = ({ onSuccess, onToggle }) => {
         const data = await response.json();
 
         const userData = {
-          id: null,
-          email: formData.email || "",
-          username: data.username,
+          id: data.user.id || "",
+          email: data.user.email || "",
+          username: data.user.username || "",          
         };
 
         onSuccess(userData);

@@ -16,21 +16,26 @@ const Auth = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleAuth = (userData) => {
+  const handleLogin = (userData) => {
     login(userData);
     navigate('/');
+  };
+
+  const handleRegisterSuccess = () => {
+    // After successful registration, switch to login view
+    setIsLogin(true);
   };
 
   return (
     <div className="auth-page">
       {isLogin ? (
         <LoginForm 
-          onSuccess={handleAuth} 
+          onSuccess={handleLogin} 
           onToggle={() => setIsLogin(false)} 
         />
       ) : (
         <RegisterForm 
-          onSuccess={handleAuth} 
+          onSuccess={handleRegisterSuccess} 
           onToggle={() => setIsLogin(true)} 
         />
       )}
