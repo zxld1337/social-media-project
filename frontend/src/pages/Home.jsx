@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
@@ -6,11 +6,20 @@ import { createPost, fetchPosts } from "../services/post";
 import { fetchUsers } from "../services/user";
 import CommentsModal from "../components/post/CommentsModal";
 import Post from "../components/post/Post";
+import { HandleLikeLogicPost } from "../services/like";
+import {
+  fetchFollowers,
+  fetchFollowing,
+  handleFollowUser,
+} from "../services/follow";
 
 const Home = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [users, setUsers] = useState([]);
+
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   const [feedPosts, setFeedPosts] = useState([]);
   const [explorePosts, setExplorePosts] = useState([]);
@@ -24,6 +33,29 @@ const Home = () => {
   // states for comments modal
   const [selectedPost, setSelectedPost] = useState(null);
   const [showComments, setShowComments] = useState(false);
+
+  const followingIds = useMemo(
+    () => new Set(following.map((f) => f.userId)),
+    [following]
+  );
+  // Fetch followers and following
+  useEffect(() => {
+    const loadFollowData = async () => {
+      try {
+        const followersData = await fetchFollowers(user.id);
+        setFollowers(followersData);
+        const followingData = await fetchFollowing(user.id);
+        setFollowing(followingData);
+        user.followerCount = followersData.length;
+        user.followingCount = followingData.length;
+      } catch (err) {
+        console.error("Failed to load follow data:", err);
+      }
+    };
+    if (user) {
+      loadFollowData();
+    }
+  }, [user, refreshTrigger]);
 
   // Fetch users for suggestions
   useEffect(() => {
@@ -52,6 +84,13 @@ const Home = () => {
     };
     loadFeedPosts();
   }, [refreshTrigger]);
+
+  useEffect(() => {
+    const filteredFeedPosts = explorePosts.filter((post) =>
+      followingIds.has(post.userId)
+    );
+    setFeedPosts(filteredFeedPosts);
+  }, [explorePosts, followingIds]);
 
   // handle logout
   const handleLogout = () => {
@@ -91,16 +130,28 @@ const Home = () => {
     setSelectedPost(null);
   };
 
-  const handleFollow = (userId) => (e) => {
-    e.preventDefault();
-
-    console.log(`Followed user with ID: ${userId}`);
+  const handleFollow = async (userId) => {
+    const followResult = await handleFollowUser(userId);
+    setRefreshTrigger(refreshTrigger + 1);
   };
 
-  const handleLike = (postId) => (e) => {
-    e.preventDefault();
+  const handleLike = async (postId) => {
+    const likeResult = await HandleLikeLogicPost(postId);
 
-    console.log(`Liked post with ID: ${postId}`);
+    if (likeResult.success) {
+      const updatedPosts = explorePosts.map((post) => {
+        if (post.id === postId) {
+          const countChange = likeResult.action === "liked" ? 1 : -1;
+          return {
+            ...post,
+            likeCount: Math.max(0, (post.likeCount || 0) + countChange),
+            isLiked: likeResult.action === "liked",
+          };
+        }
+        return post;
+      });
+      setExplorePosts(updatedPosts);
+    }
   };
 
   return (
@@ -173,6 +224,9 @@ const Home = () => {
                   post={post}
                   onLike={handleLike}
                   onComment={handleOpenComments}
+                  onFollow={handleFollow}
+                  isFollowing={followingIds.has(post.userId)}
+                  currentUserId={user.id}
                 />
               ))}
             </div>
@@ -190,15 +244,21 @@ const Home = () => {
               <p className="profile-email">{user?.email}</p>
               <div className="profile-stats">
                 <div className="stat">
-                  <strong>245</strong>
+                  <strong>
+                    {
+                      explorePosts.filter(
+                        (post) => post.username === user.username
+                      ).length
+                    }
+                  </strong>
                   <span>Posts</span>
                 </div>
                 <div className="stat">
-                  <strong>1.2K</strong>
+                  <strong>{followers.length}</strong>
                   <span>Followers</span>
                 </div>
                 <div className="stat">
-                  <strong>456</strong>
+                  <strong>{following.length}</strong>
                   <span>Following</span>
                 </div>
               </div>
@@ -213,7 +273,11 @@ const Home = () => {
             {/* Suggestions */}
             <div className="suggestions-card">
               <h4>Suggestions for You</h4>
-              {[...users.filter((x) => x.id !== user.id)]
+              {[
+                ...users
+                  .filter((x) => x.id !== user.id) // Exclude yourself
+                  .filter((x) => !followingIds.has(x.id)), // Exclude users you're already following
+              ]
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 2)
                 .map((suggestedUser, index) => (
@@ -233,7 +297,7 @@ const Home = () => {
                     </div>
                     <button
                       className="follow-btn"
-                      onClick={handleFollow(suggestedUser.id)}
+                      onClick={() => handleFollow(suggestedUser.id)}
                     >
                       Follow
                     </button>
@@ -245,7 +309,11 @@ const Home = () => {
       </div>
       {/* Comments Modal */}
       {showComments && selectedPost && (
-        <CommentsModal post={selectedPost} onClose={handleCloseComments} />
+        <CommentsModal
+          post={selectedPost}
+          onClose={handleCloseComments}
+          trigger={setRefreshTrigger}
+        />
       )}
     </>
   );

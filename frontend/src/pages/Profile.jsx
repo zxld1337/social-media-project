@@ -20,6 +20,8 @@ const Profile = () => {
     location: 'Eger, HU'
   });
 
+  
+
   const handleSave = () => {
     // waiting for backend
     setIsEditing(false);
@@ -168,11 +170,11 @@ const Profile = () => {
                   <div className="stat-label">Posts</div>
                 </div>
                 <div className="stat-item">
-                  <div className="stat-number">1,245</div>
+                  <div className="stat-number">{user.followerCount}</div>
                   <div className="stat-label">Followers</div>
                 </div>
                 <div className="stat-item">
-                  <div className="stat-number">567</div>
+                  <div className="stat-number">{user.followingCount}</div>
                   <div className="stat-label">Following</div>
                 </div>
               </div>
@@ -200,7 +202,7 @@ const Profile = () => {
                     <span className="post-stat">❤️ {post.likes}</span>
                     <span className="post-stat">💬 {post.comments}</span>
                   </div>
-                  <span className="post-time">{post.time || "idk h ago"}</span>
+                  <span className="post-time">{post.dateOfPost || "idk h ago"}</span>
                 </div>
               </div>
             ))}
