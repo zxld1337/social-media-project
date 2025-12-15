@@ -13,5 +13,8 @@
 
         //Display like count with post
         public int LikeCount { get; set; }
+
+        //Display comment count with post
+        public int CommentCount { get; set; }
     }
 }
