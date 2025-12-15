@@ -1,42 +1,71 @@
 const BASE_URL = "http://localhost:5000/api/follow";
 
 export const fetchFollowers = async (userId) => {
-    const response = await fetch(`${BASE_URL}/${userId}/followers`);
+    const response = await fetch(`${BASE_URL}/${userId}/followers`, {
+        method: 'GET',
+        credentials: 'include',
+    }
+        
+    );
     const data = await response.json();
     return data;
 };
 
 export const fetchFollowing = async (userId) => {
-    const response = await fetch(`${BASE_URL}/${userId}/following`);
-    const data = await response.json();
-    return data;
-}
-
-export const followUser = async (userId) => {
-    const response = await fetch(`${BASE_URL}/${userId}/follow`, {
-        method: 'POST',
+    const response = await fetch(`${BASE_URL}/${userId}/following`, {
+        method: 'GET',
         credentials: 'include',
     });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.Message || 'Failed to follow user');
-    }
     const data = await response.json();
     return data;
 }
 
-export const unfollowUser = async (userId) => {
-    const response = await fetch(`${BASE_URL}/${userId}/unfollow`, {
-        method: 'POST',
-        credentials: 'include',
-    }); 
-    
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.Message || 'Failed to unfollow user');
+
+export const handleFollowUser = async (userId) => {
+    const followRes = await followUser(userId);
+
+    if (followRes.ok) {
+        return { success: true,  action: 'followed' };
     }
 
-    const data = await response.json();
-    return data;
+    if (followRes.status === 409) {
+        const unfollowRes = await unfollowUser(userId);
+        return { success: unfollowRes.ok, action: 'unfollowed' };
+    } 
+
+    return { success: false, action: 'none' };
+}
+
+
+export const followUser = async (userId) => {
+    try {
+        console.log('Following user ID:', userId);
+        const response = await fetch(`${BASE_URL}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ FollowingId: userId }),
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Follow error:', response.status, errorText);
+        }
+        
+        return response;
+    } catch (error) {
+        console.error('Network error:', error);
+        return { ok: false, status: 500 };
+    }
+}
+
+export const unfollowUser = async (userId) => {
+    const response = await fetch(`${BASE_URL}/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+    }); 
+    return response;
 }
