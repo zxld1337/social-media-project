@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { fetchCommentsByPostId, createComment, deleteComment } from '../../services/comment';
 import '../../styles/CommentsModal.css';
 
-const CommentsModal = ({ post, onClose }) => {
+const CommentsModal = ({ post, onClose, trigger }) => {
   const { user } = useAuth();
   const [newComment, setNewComment] = useState('');
   const [comments, setComments] = useState([]);
@@ -50,13 +50,13 @@ const CommentsModal = ({ post, onClose }) => {
         username: user.username,
         userId: user.id,
         text: newComment,
-        time: 'Just now',
-        likes: 0
+        time: result.dateOfComment,
       };
       
       // Add new comment to the beginning of the list
       setComments([newCommentObj, ...comments]);
       setNewComment('');
+      trigger(result.commentId); // Notify parent of new comment
     } catch (err) {
       setError('Failed to post comment');
       console.error('Error posting comment:', err);
@@ -129,7 +129,11 @@ const CommentsModal = ({ post, onClose }) => {
             <div className="post-stats">
               <span className="post-stat">❤️ {post.likes} likes</span>
               <span className="post-stat">💬 {comments.length} comments</span>
-              <span className="post-time">{post.time}</span>
+              <span className="post-time">{(new Date(post.time)).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}</span>
             </div>
           </div>
         </div>
