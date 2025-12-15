@@ -1,8 +1,27 @@
 // Post.jsx
-import React from 'react';
-import '../../styles/post.css';
+import React, { useState, useEffect } from "react";
+import "../../styles/post.css";
 
-const Post = ({ post, onLike, onComment }) => {
+const Post = ({
+  post,
+  onLike,
+  onComment,
+  onFollow,
+  isFollowing,
+  currentUserId,
+}) => {
+  const isOwnPost = post.userId === currentUserId;
+  const [followStatus, setFollowStatus] = useState(isFollowing);
+
+  useEffect(() => {
+    setFollowStatus(isFollowing);
+  }, [isFollowing]);
+
+  const handleFollowClick = () => {
+    setFollowStatus(!followStatus);
+    onFollow(post.userId);
+  };
+
   return (
     <div className="post-card">
       <div className="post-header">
@@ -13,16 +32,24 @@ const Post = ({ post, onLike, onComment }) => {
         />
         <div className="post-user">
           <strong>{post.username}</strong>
-          <span className="post-time">{post.dateOfPost || "xy hours ago"}</span>
         </div>
+
+        {!isOwnPost && (
+          <button
+            className={`follow-btn ${followStatus ? "following" : ""}`}
+            onClick={handleFollowClick}
+          >
+            {followStatus ? "✓ Following" : "+ Follow"}
+          </button>
+        )}
       </div>
       <div className="post-content">{post.text}</div>
-      
+
       <div className="post-stats">
-        <span className="post-stat">❤️ {post.likes || 0} likes</span>
+        <span className="post-stat">❤️ {post.likeCount || 0} likes</span>
         <span className="post-stat">💬 {post.commentCount || 0} comments</span>
       </div>
-      
+
       <div className="post-actions">
         <button className="action-btn" onClick={() => onLike(post.id)}>
           ❤️ Like
@@ -30,6 +57,13 @@ const Post = ({ post, onLike, onComment }) => {
         <button className="action-btn" onClick={() => onComment(post)}>
           💬 Comment
         </button>
+        <span className="post-time">
+          {new Date(post.dateOfPost).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          }) || "xy hours ago"}
+        </span>
       </div>
     </div>
   );
